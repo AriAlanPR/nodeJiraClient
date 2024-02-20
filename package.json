@@ -1,0 +1,16 @@
+{
+  "name": "oauthify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^16.4.4",
+    "oauth": "^0.10.0"
+  }
+}
