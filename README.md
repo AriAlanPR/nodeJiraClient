@@ -18,3 +18,14 @@ JIRA_ACCESS_TOKEN: The access token of the user you're going to authenticate wit
 JIRA_ACCESS_TOKEN_SECRET= The access token secret of the user you're going to authenticate with, in case you already have it.
 JIRA_BASE_URL: The host url of your Jira instance.
 ```
+
+import with
+commonJS: 
+`const jiraAuthenticator = require('oauth-jira').JiraAuthenticator;`
+
+ES module:
+`import { JiraAuthenticator } from 'oauth-jira';`
+
+The class JiraAuthenticator contains a property named `utils` with some helper methods to make easier requests to jira.
+
+For more details, please review the example included in this package.

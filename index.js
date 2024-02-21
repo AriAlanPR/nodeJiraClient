@@ -91,8 +91,8 @@ class JiraAuthenticator {
 const JiraUtils = function() {
   if(!this.instance) {
     this.instance = {
-      rest_base_path: '/rest/api/3',
-      rest_base_path2: '/rest/api/2',
+      rest_base_path: '/rest/api/2',
+      rest_base_path3: '/rest/api/3',
       rest_base_path_latest: '/rest/api/latest',
       jql: (query, options = {}) => {
         let url = `${rest_base_path}/search?jql=${encodeURIComponent(query)}`;
