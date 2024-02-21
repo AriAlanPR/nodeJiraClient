@@ -1,15 +1,13 @@
 require('dotenv').config();
-let JiraAuthenticator = require('./index.js');
 const echo = console.log;
 const p = echo;
+const JiraAuthenticator = require('./index.js').JiraAuthenticator;
 
 const jiraBaseUrl = process.env.JIRA_BASE_URL;
 const consumerKey = process.env.JIRA_CONSUMER_KEY;
 const consumerSecretPath = `${process.cwd()}/${process.env.JIRA_CONSUMER_SECRET_PATH}`;
 const accessToken = process.env.JIRA_ACCESS_TOKEN;
 const accessTokenSecret = process.env.JIRA_ACCESS_TOKEN_SECRET;
-
-p(JiraAuthenticator);
 
 let ja = new JiraAuthenticator(
     jiraBaseUrl,
@@ -29,3 +27,5 @@ ja.Get(
         p(require('util').inspect(data));  
     }       
 );
+
+module.exports = {};
