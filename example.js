@@ -34,17 +34,12 @@ let ja = new JiraAuthenticator(
     p("----------------------------------------------------------")
     p("build jql query");
     
-    let url = ja.utils.jql('your_query', { fields: ['field1', 'field2'], start_at: 1, max_results: 10 });
+    let url = ja.utils.jql({query: 'your_query', api: 3, fields: ['field1', 'field2'], start_at: 1, max_results: 10 });
     p(url);
-    
-    p("----------------------------------------------------------")
-    p("build a url with a subpath with possibity to specify a range of results");
-    let url2 = ja.utils.query('subpath', { start_at: 1, max_results: 10 });
-    p(url2);
 
     p("test a request to a jira issue");
     p("----------------------------------------------------------")
-    const res = await ja.Get(`${jiraBaseUrl}${ja.utils.rest_base_path3}/issue/${ticket}`);
+    const res = await ja.Get(`${ja.utils.rest_base_path3}/issue/${ticket}`);
     p(res.body);
 
 })();
