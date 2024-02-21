@@ -41,6 +41,12 @@ let ja = new JiraAuthenticator(
     p("----------------------------------------------------------")
     const res = await ja.Get(`${ja.utils.rest_base_path3}/issue/${ticket}`);
     p(res.body);
+    
+    p("test Issue object");
+    p("----------------------------------------------------------")
+    const issues = await ja.issue.Weekly();
+    p(issues, "GOT ISSUES");
+    p(issues.length, "LENGTH");
 
 })();
 
