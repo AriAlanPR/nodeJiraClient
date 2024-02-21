@@ -15,9 +15,7 @@ let ja = new JiraAuthenticator(
     consumerKey,
     consumerSecretPath,
     null
-)
-
-p(ja);
+);
 
 (async function() {
     p("set access tokens");

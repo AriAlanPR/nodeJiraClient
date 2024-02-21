@@ -90,10 +90,14 @@ class JiraAuthenticator {
 
 const JiraUtils = function() {
   if(!this.instance) {
+    const rest_base_path = '/rest/api/2';
+    const rest_base_path3 = '/rest/api/3';
+    const rest_base_path_latest = '/rest/api/latest';
+
     this.instance = {
-      rest_base_path: '/rest/api/2',
-      rest_base_path3: '/rest/api/3',
-      rest_base_path_latest: '/rest/api/latest',
+      rest_base_path: rest_base_path,
+      rest_base_path3: rest_base_path3,
+      rest_base_path_latest: rest_base_path_latest,
       jql: (query, options = {}) => {
         let url = `${rest_base_path}/search?jql=${encodeURIComponent(query)}`;
 
@@ -130,8 +134,5 @@ const JiraUtils = function() {
 
   return this.instance;
 }
-
-// example usage of jira utils jql()
-// let url = jql('your_query', { fields: ['field1', 'field2'], start_at: 1, max_results: 10 });
 
 module.exports = { JiraAuthenticator };
