@@ -59,13 +59,21 @@ class JiraAuthenticator {
         return this.accessToken;
     }
 
-    Get(zelda, handler) {
+    Get(zelda) {      
+      return new Promise((resolve, reject) => {
         this.oauthClient.get(
-            zelda,
-            this.accessToken.token,
-            this.accessToken.secret,
-            handler
+          zelda,
+          this.accessToken.token,
+          this.accessToken.secret,
+          (err, data, res) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve({ data, res });
+            }
+          }
         )
+      });
     }
 }
 
