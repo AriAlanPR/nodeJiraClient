@@ -30,7 +30,8 @@ p(ja);
 
     p("----------------------------------------------------------")
     p("verify user connection");
-    const res = await ja.Get(`${jiraBaseUrl}${ja.utils.rest_base_path3}/issue/${ticket}`);
+    let isConnected = await ja.verifyUserConnection();
+    p("is connected: ", isConnected);
     
     p("----------------------------------------------------------")
     p("build jql query");
@@ -43,8 +44,9 @@ p(ja);
     let url2 = ja.utils.query('subpath', { start_at: 1, max_results: 10 });
     p(url2);
 
-    p("got data");
+    p("test a request to a jira issue");
     p("----------------------------------------------------------")
+    const res = await ja.Get(`${jiraBaseUrl}${ja.utils.rest_base_path3}/issue/${ticket}`);
     p(res.body);
 
 })();
