@@ -90,16 +90,16 @@ class JiraAuthenticator {
 
 const JiraUtils = function() {
   if(!this.instance) {
-    const rest_base_path = '/rest/api/2';
-    const rest_base_path3 = '/rest/api/3';
-    const rest_base_path_latest = '/rest/api/latest';
-
+    const base_paths = ['/rest/api/latest', '/rest/api/1', '/rest/api/2', '/rest/api/3'];
+    
     this.instance = {
-      rest_base_path: rest_base_path,
-      rest_base_path3: rest_base_path3,
-      rest_base_path_latest: rest_base_path_latest,
-      jql: (query, options = {}) => {
-        let url = `${rest_base_path}/search?jql=${encodeURIComponent(query)}`;
+      rest_base_path: base_paths[2],
+      rest_base_path3: base_paths[3],
+      rest_base_path_latest: base_paths[0],
+      jql: (options = {}) => {        
+        const subpath = options.api && options.api >= 0 && options.api < base_paths.length ?  base_paths[options.api] : base_paths[0];
+        
+        let url = `${subpath}/search?jql=${encodeURIComponent(options.query)}`;
 
         if (options.fields) {
             url += `&fields=${options.fields.map(value => encodeURIComponent(value.toString())).join(',')}`;
@@ -118,15 +118,6 @@ const JiraUtils = function() {
             url += `&expand=${options.expand.map(value => encodeURIComponent(value.toString())).join(',')}`;
         }
 
-        return url;
-      },
-      query: (subpath, options = {}) => {
-        let url = `${rest_base_path}/${subpath}?startAt=${encodeURIComponent(options.start_at.toString())}`;
-    
-        if (options.max_results) {
-            url += `&maxResults=${encodeURIComponent(options.max_results.toString())}`;
-        }
-    
         return url;
       }
     }
