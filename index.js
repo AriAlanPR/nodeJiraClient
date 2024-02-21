@@ -6,6 +6,7 @@ class JiraAuthenticator {
       this.consumerKey = consumerKey;
       this.consumerSecret = fs.readFileSync(consumerSecretPemPath, 'utf8');
       this.jiraBaseUrl = jiraBaseUrl;
+      this.utils = JiraUtils();
       this.oauthClient = new OAuth.OAuth(
         `${this.jiraBaseUrl}/plugins/servlet/oauth/request-token`,
         `${this.jiraBaseUrl}/plugins/servlet/oauth/access-token`,
@@ -59,7 +60,17 @@ class JiraAuthenticator {
         return this.accessToken;
     }
 
-    Get(zelda) {      
+    async verifyUserConnection() {
+      if(!this.accessToken) {
+        throw new Error("Access token not set");
+      }
+
+      const res = await this.Get(`${this.jiraBaseUrl}/rest/auth/latest/session`);
+
+      return [null, undefined].includes(res.body?.name);
+    }
+
+    async Get(zelda) {      
       return new Promise((resolve, reject) => {
         this.oauthClient.get(
           zelda,
@@ -76,5 +87,51 @@ class JiraAuthenticator {
       });
     }
 }
+
+const JiraUtils = function() {
+  if(!this.instance) {
+    this.instance = {
+      rest_base_path: '/rest/api/3',
+      rest_base_path2: '/rest/api/2',
+      rest_base_path_latest: '/rest/api/latest',
+      jql: (query, options = {}) => {
+        let url = `${rest_base_path}/search?jql=${encodeURIComponent(query)}`;
+
+        if (options.fields) {
+            url += `&fields=${options.fields.map(value => encodeURIComponent(value.toString())).join(',')}`;
+        }
+        if (options.start_at) {
+            url += `&startAt=${encodeURIComponent(options.start_at.toString())}`;
+        }
+        if (options.max_results) {
+            url += `&maxResults=${encodeURIComponent(options.max_results.toString())}`;
+        }
+        if (options.validate_query === false) {
+            url += '&validateQuery=false';
+        }
+        if (options.expand) {
+            options.expand = Array.isArray(options.expand) ? options.expand : [options.expand];
+            url += `&expand=${options.expand.map(value => encodeURIComponent(value.toString())).join(',')}`;
+        }
+
+        return url;
+      },
+      query: (subpath, options = {}) => {
+        let url = `${rest_base_path}/${subpath}?startAt=${encodeURIComponent(options.start_at.toString())}`;
+    
+        if (options.max_results) {
+            url += `&maxResults=${encodeURIComponent(options.max_results.toString())}`;
+        }
+    
+        return url;
+      }
+    }
+  }
+
+  return this.instance;
+}
+
+// example usage of jira utils jql()
+// let url = jql('your_query', { fields: ['field1', 'field2'], start_at: 1, max_results: 10 });
 
 module.exports = { JiraAuthenticator };
