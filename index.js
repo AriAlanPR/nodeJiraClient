@@ -69,4 +69,4 @@ class JiraAuthenticator {
     }
 }
 
-exports = JiraAuthenticator;
+module.exports = JiraAuthenticator;
