@@ -17,15 +17,14 @@ let ja = new JiraAuthenticator(
 )
 
 p(ja);
+
+(async function() {
 p(ja.setAccessTokens(accessToken, accessTokenSecret));
-ja.Get(
-    'https://dmcstrategicit.atlassian.net/rest/api/3/issue/JSUITE-475',
-    function (e, data, res){
-        if (e) console.error(e);
-        p("got data");
-        p("----------------------------------------------------------")
-        p(require('util').inspect(data));  
-    }       
-);
+const res = await ja.Get('https://dmcstrategicit.atlassian.net/rest/api/3/issue/JSUITE-475');
+
+p("got data");
+p("----------------------------------------------------------")
+p(res.body);
+})();
 
 module.exports = {};

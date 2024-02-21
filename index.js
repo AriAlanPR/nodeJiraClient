@@ -65,11 +65,11 @@ class JiraAuthenticator {
           zelda,
           this.accessToken.token,
           this.accessToken.secret,
-          (err, data, res) => {
+          (err, body, res) => {
             if (err) {
               reject(err);
             } else {
-              resolve({ data, res });
+              resolve({ body, res });
             }
           }
         )
