@@ -5,6 +5,17 @@ class Issue {
         this.HAS_WORKLOG = 'worklogDate IS NOT null';
         this.WEEKLY_WORKLOG = 'worklogDate >= startOfWeek()';
         this.MONTHLY_WORKLOG = 'worklogDate >= startOfMonth()';
+        this.FIELDS = [
+            "project",
+            "assignee",
+            "creator",
+            "summary",
+            "worklog",
+            "timetracking",
+            "priority",
+            "issuetype",
+            "created",
+          ];
         this.client = client;
     }
 
@@ -28,7 +39,7 @@ class Issue {
         return JSON.parse(res.body);
     }
 
-    async findBy(params) {
+    async findBy(params, extrafields = []) {
         this.validateClient();
 
         try {
@@ -41,7 +52,7 @@ class Issue {
             if (!utils.isNullOrEmpty(params.worklogAuthor)) { query.push(`worklogAuthor='${params.worklogAuthor}'`); }
             if (!utils.isNullOrEmpty(params.epic)) { query.push(`parentEpic=${params.epic}`); }
 
-            const found = await this.Search(query.join(' AND '));
+            const found = await this.Search(query.join(' AND '), extrafields);
             
             const res = found.filter(issue => {
                 return issue.fields?.worklog?.total !== 0
@@ -55,13 +66,13 @@ class Issue {
         }
     }
 
-    async Search(query) {
+    async Search(query, extrafields = []) {
         this.validateClient();
         try {
             let issues = [];
 
             do {
-                const jql = this.client.utils.jql({query: query, api: 3, fields: null, start_at: issues.length, max_results: 100 });
+                const jql = this.client.utils.jql({query: query, api: 3, fields: this.FIELDS.concat(extrafields), start_at: issues.length, max_results: 100 });
                 const res = await this.client.Get(jql);
                 issues = issues.concat(JSON.parse(res.body).issues);
             } while(issues.length !== 0 && issues.length % 100 === 0);

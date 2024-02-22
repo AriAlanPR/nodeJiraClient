@@ -55,16 +55,20 @@ let ja = new JiraAuthenticator(
     p("test find issue by params");
     p("----------------------------------------------------------")
     const params = {
-        project: "PROJECTIFY",
+        project: "JSUITE",
         start_date: "2024-01-01",
         end_date: "2024-02-22",
-        assignee: "some@example.com",
-        worklogAuthor: "some@example.com",
-        epic: "PROJ-1"
+        assignee: "alan.perez@leadonemx.com",
+        worklogAuthor: "alan.perez@leadonemx.com",
+        epic: "JSUITE-218"
     };
     const issues2 = await ja.issue.findBy(params);
     p(issues2, "FOUND PARAMETERED ISSUES");
     p(issues2.length, "GOT PARAMETERED ISSUES");
+
+    p("Get issue2 worklogs");
+    p("----------------------------------------------------------")
+    p(issues2[0].fields?.worklog, "WORKLOG");
 })();
 
 module.exports = {};
