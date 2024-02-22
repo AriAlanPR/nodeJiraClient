@@ -42,12 +42,29 @@ let ja = new JiraAuthenticator(
     const res = await ja.Get(`${ja.utils.rest_base_path3}/issue/${ticket}`);
     p(res.body);
     
-    p("test Issue object");
+    p("test weekly worked Issues");
     p("----------------------------------------------------------")
     const issues = await ja.issue.Weekly();
-    p(issues, "GOT ISSUES");
-    p(issues.length, "LENGTH");
+    p(issues.length, "GOT ISSUES");
 
+    p("test find issue by id");
+    p("----------------------------------------------------------")
+    const issue = await ja.issue.Find(ticket);
+    p(issue, "FOUND ISSUE");
+
+    p("test find issue by params");
+    p("----------------------------------------------------------")
+    const params = {
+        project: "PROJECTIFY",
+        start_date: "2024-01-01",
+        end_date: "2024-02-22",
+        assignee: "some@example.com",
+        worklogAuthor: "some@example.com",
+        epic: "PROJ-1"
+    };
+    const issues2 = await ja.issue.findBy(params);
+    p(issues2, "FOUND PARAMETERED ISSUES");
+    p(issues2.length, "GOT PARAMETERED ISSUES");
 })();
 
 module.exports = {};
